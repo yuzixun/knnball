@@ -4,7 +4,6 @@ require 'descriptive_statistics'
 module KnnBall
 
   autoload :Ball, "./lib/knnball/ball.rb"
-  autoload :Stat, "./lib/knnball/stat.rb"
   autoload :KDTree, "./lib/knnball/kdtree.rb"
   autoload :ResultSet, "./lib/knnball/result_set.rb"
 
@@ -43,15 +42,8 @@ module KnnBall
     return nil if data.nil?
     return Ball.new(data.first) if data.size == 1
 
-    # Order the array such as the middle point is the median and
-    # that every point on the left are of lesser value than median
-    # and that every point on the right are of greater value
-    # than the median. They are not more sorted than that.
     median_idx = median_index(data) # 数组的中间数
-
-    # value = Stat.median!(data) {|v1, v2| v1[:point][actual_dimension-1] <=> v2[:point][actual_dimension-1]}
     data.sort_by! { |index| index[:point][actual_dimension-1] }
-    # offset = (data.size % 2 == 0) ? (data.size / 2) : (data.size - 1) / 2
     value = data[median_idx]
     ball = Ball.new(value)
 
