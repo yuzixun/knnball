@@ -1,18 +1,12 @@
 # encoding: UTF-8
+require 'descriptive_statistics'
 
-# Copyright (C) 2011 Olivier Amblet <http://olivier.amblet.net>
-#
-# knnball is freely distributable under the terms of an MIT license.
-# See LICENSE or http://www.opensource.org/licenses/mit-license.php.
-
-# This module is used as namespace for every elements of
-# the knnball library.
 module KnnBall
 
-  autoload :Ball, 'knnball/ball'
-  autoload :Stat, 'knnball/stat'
-  autoload :KDTree, 'knnball/kdtree'
-  autoload :ResultSet, 'knnball/result_set'
+  autoload :Ball, "./lib/knnball/ball.rb"
+  autoload :Stat, "./lib/knnball/stat.rb"
+  autoload :KDTree, "./lib/knnball/kdtree.rb"
+  autoload :ResultSet, "./lib/knnball/result_set.rb"
 
   # Retrieve a new BallTree given an array of input values.
   #
@@ -28,6 +22,10 @@ module KnnBall
     if(data.nil? || data.empty?)
       raise ArgumentError.new("data argument must be a not empty Array")
     end
+
+    # 取出维度
+    # 创建n维度的树
+    # 然后生成树
     max_dimension = data.first[:point].size
     kdtree = KDTree.new(max_dimension)
     kdtree.root = generate(data, max_dimension)
@@ -49,30 +47,30 @@ module KnnBall
     # that every point on the left are of lesser value than median
     # and that every point on the right are of greater value
     # than the median. They are not more sorted than that.
-    median_idx = Stat.median_index(data)
-    value = Stat.median!(data) {|v1, v2| v1[:point][actual_dimension-1] <=> v2[:point][actual_dimension-1]}
+    median_idx = median_index(data) # 数组的中间数
+
+    # value = Stat.median!(data) {|v1, v2| v1[:point][actual_dimension-1] <=> v2[:point][actual_dimension-1]}
+    data.sort_by! { |index| index[:point][actual_dimension-1] }
+    # offset = (data.size % 2 == 0) ? (data.size / 2) : (data.size - 1) / 2
+    value = data[median_idx]
     ball = Ball.new(value)
 
     actual_dimension = (max_dimension == actual_dimension ? 1 : actual_dimension)
+    
 
-    ball.left = generate(data[0..(median_idx-1)], max_dimension, actual_dimension) if median_idx > 0
+    ball.left = generate(data[0..(median_idx-1)], (visible_dimension ), actual_dimension) if median_idx > 0
     ball.right = generate(data[(median_idx+1)..-1], max_dimension, actual_dimension) if median_idx < (data.count - 1)
     return ball
   end
 
-  # Retrieve an internal string representation of the index
-  # that can then be persisted.
-  def self.marshall(ball_tree)
-    return ""
+  def self.median_index(data)
+    (data.size % 2 == 0) ? (data.size / 2) : (data.size - 1) / 2
   end
 
-  # Retrieve a BallTree instance from a previously marshalled instance.
-  def self.unmarshall(marshalled_content)
-    return KDTree.new
+  # visualization
+  def self.visible_dimension data
+    points_arr = data.map { |e| e[:point] }.transpose
+    points_arr.map(&:variance).each_with_index.max[1]
   end
 
-  # Retrieve the k nearest neighbor of the given position.
-  def self.find_knn(ball_tree, position, k = 1, options = Hash.new)
-    return []
-  end
 end

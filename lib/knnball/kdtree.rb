@@ -51,7 +51,9 @@ module KnnBall
       return nil if root.nil?
       return nil if coord.nil?
 
+      # 设置获取结果数量
       results = (options[:results] ? options[:results] : ResultSet.new({limit: options[:limit] || 1}))
+
       root_ball = options[:root] || root
 
       # keep the stack while finding the leaf best match.
@@ -64,6 +66,7 @@ module KnnBall
       current_best = nil
       current = root_ball
       while current_best.nil?
+        # puts "current.dimension is #{current.inspect}"
         dim = current.dimension-1
         if(current.complete?)
           next_ball = (coord[dim] <= current.center[dim] ? current.left : current.right)
@@ -82,9 +85,9 @@ module KnnBall
 
       # Move up to check split
       parents.reverse!
-      results.add(current_best.quick_distance(coord), current_best.value)
+      results.add(current_best.distance(coord), current_best.value)
       parents.each do |current_node|
-        dist = current_node.quick_distance(coord)
+        dist = current_node.distance(coord)
         if results.eligible?( dist )
           results.add(dist, current_node.value)
         end

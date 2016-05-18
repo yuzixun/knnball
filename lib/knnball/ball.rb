@@ -35,57 +35,52 @@ module KnnBall
       value[:point]
     end
 
-    def nearest(target, min)
-      result = nil
-      d = [quick_distance(target), min[0]].min
-      if d < min[0]
-        min[0] = d
-        result = self
-      end
+    # def nearest(target, min)
+    #   result = nil
+    #   d = [distance(target), min[0]].min
+    #   if d < min[0]
+    #     min[0] = d
+    #     result = self
+    #   end
 
-      # determine if we need to dive into sub tree
-      dp = (center[dimension-1] - target[dimension-1]).abs
-      new_result = nil
-      if(dp < min[0])
-        # must dive into both left and right
-        unless(left.nil?)
-          new_result = left.nearest(target, min)
-          result = new_result unless new_result.nil?
-        end
-        unless right.nil?
-          new_result = right.nearest(target, min)
-          result = new_result unless new_result.nil?
-        end
-      else
-        # only need to dive in one
-        if(target[dimension-1] < center[dimension-1])
-          unless(left.nil?)
-            new_result = left.nearest(target, min)
-          end
-        else
-          unless(right.nil?)
-            new_result = right.nearest(target, min)
-          end
-        end
-        result = new_result unless new_result.nil?
-      end
-      return result
-    end
+    #   puts "nearest"
+    #   # determine if we need to dive into sub tree
+    #   dp = (center[dimension-1] - target[dimension-1]).abs
+    #   puts "#{center[dimension-1]} - #{target[dimension-1]}"
+    #   new_result = nil
+    #   if(dp < min[0])
+    #     # must dive into both left and right
+    #     unless(left.nil?)
+    #       new_result = left.nearest(target, min)
+    #       result = new_result unless new_result.nil?
+    #     end
+    #     unless right.nil?
+    #       new_result = right.nearest(target, min)
+    #       result = new_result unless new_result.nil?
+    #     end
+    #   else
+    #     # only need to dive in one
+    #     if(target[dimension-1] < center[dimension-1])
+    #       unless(left.nil?)
+    #         new_result = left.nearest(target, min)
+    #       end
+    #     else
+    #       unless(right.nil?)
+    #         new_result = right.nearest(target, min)
+    #       end
+    #     end
+    #     result = new_result unless new_result.nil?
+    #   end
+    #   return result
+    # end
 
     # Compute euclidien distance.
     #
     # @param coordinates an array of coord or a Ball instance
+    # 不求距离，求出距离的平方值即可
     def distance(coordinates)
       coordinates = coordinates.center if coordinates.respond_to?(:center)
-      Math.sqrt([center, coordinates].transpose.map {|a,b| (b - a)**2}.reduce {|d1,d2| d1 + d2})
-    end
-
-    # Quickly compute a distance using Manhattan
-    def quick_distance(coordinates)
-      distance(coordinates)
-#      coordinates = coordinates.center if coordinates.respond_to?(:center)
-#      [center, coordinates].transpose.map {|a,b| (b - a)**2}.reduce {|d1,d2| d1 + d2}
-#      [center, coordinates].transpose.map {|a,b| (b - a).abs}.reduce {|d1,d2| d1 + d2}
+      [center, coordinates].transpose.map {|a,b| (b - a)**2}.reduce {|d1,d2| d1 + d2}
     end
 
     def count
