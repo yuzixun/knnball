@@ -37,6 +37,8 @@ module KnnBall
 
     ball.left = generate(data[0..(median_idx-1)], max_dimension) if median_idx > 0
     ball.right = generate(data[(median_idx+1)..-1], max_dimension) if median_idx < (data.count - 1)
+    ball.dimension = actual_dimension
+    
     return ball
   end
 
