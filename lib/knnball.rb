@@ -21,10 +21,12 @@ module KnnBall
     return kdtree
   end
 
-  def self.generate(data, max_dimension, actual_dimension = 1)
+  def self.generate(data, max_dimension)
     return nil if data.nil?
     return Ball.new(data.first) if data.size == 1
 
+    # 计算出维度
+    actual_dimension = visible_dimension data
     # 数组的中间数
     median_idx = median_index(data)
     # 将指定维度的数据排序
@@ -33,11 +35,8 @@ module KnnBall
     value = data[median_idx]
     ball = Ball.new(value)
 
-    # 默认取第一维度
-    actual_dimension = (max_dimension == actual_dimension ? 1 : actual_dimension)
-
-    ball.left = generate(data[0..(median_idx-1)], max_dimension, actual_dimension) if median_idx > 0
-    ball.right = generate(data[(median_idx+1)..-1], max_dimension, actual_dimension) if median_idx < (data.count - 1)
+    ball.left = generate(data[0..(median_idx-1)], max_dimension) if median_idx > 0
+    ball.right = generate(data[(median_idx+1)..-1], max_dimension) if median_idx < (data.count - 1)
     return ball
   end
 
