@@ -27,7 +27,7 @@ module KnnBall
       # 未找到最优值
       while current_best.nil?
         # 取出展开的维度
-        dim = current.dimension-1
+        dim = current.dimension
         # 是否是一棵完全二叉树
         if(current.complete?)
           # 如果输入的值，小于等于节点的值，则进入左侧树，反之，进入右侧树
@@ -61,7 +61,7 @@ module KnnBall
           results.add(dist, current_node.value)
         end
 
-        dim = current_node.dimension-1
+        dim = current_node.dimension
         if current_node.complete?
           split_node = (coord[dim] <= current_node.center[dim] ? current_node.right : current_node.left)
           best_dist = results.threshold_value
