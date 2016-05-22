@@ -1,8 +1,27 @@
-# # 验证方法
-# result.each do |r|
-#   puts "distance to #{r} is #{distance(r[:point], input_point)}"
-# end
+Ruby运行环境：2.0.0+
 
-def distance(from, to)
-  [from, to].transpose.map {|a,b| (b - a)**2}.reduce {|d1,d2| d1 + d2}
-end
+所需Gem: descriptive_statistics
+
+````
+gem install descriptive_statistics
+````
+
+运行：
+
+````
+ruby calc_dist.rb
+````
+
+运行之后，输入点的经度、维度、高度
+可以按照逗号分隔，也可以逐个输入。
+
+Example:
+
+````
+Ready to Calculate...
+Input Point: 
+9.2796605, 56.7367747, 17.3937648136634
+{:id=>95364858, :point=>[9.2796605, 56.7367747, 17.3937648136634]}
+{:id=>100807699, :point=>[9.2522153, 56.7495346, 17.4036713946703]}
+{:id=>100266584, :point=>[9.2860111, 56.7079333, 17.3704822385125]}
+````
