@@ -1,8 +1,12 @@
 说明：
 代码fork自：https://github.com/oliamb/knnball
+
 本人做了一下修改：
+
 1.  删除了test相关内容
+
 2.  删除了Gemfile等文件
+
 3.  原算法在选取排序维度时，默认使用了维度1。
     在这里引入了gem descriptive_statistics，做方差。
     选择方差较大的维度做排序。
