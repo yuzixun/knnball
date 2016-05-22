@@ -19,7 +19,7 @@ index = KnnBall.build(points)
 # result = index.nearest(input_point, limit: 5)
 puts "Ready to Calculate..."
 while true
-  puts "please inputs points: "
+  puts "Input Point: "
 
   input = gets.chop
   if input.include? ","

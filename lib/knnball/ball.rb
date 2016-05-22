@@ -4,7 +4,7 @@ module KnnBall
   class Ball
     attr_accessor :left, :right, :value, :dimension
 
-    def initialize(value, dimension = 1, left = nil, right = nil)
+    def initialize(value, dimension = 0, left = nil, right = nil)
       unless (value.respond_to?(:include?) && value.respond_to?(:[]))
         raise ArgumentError.new("Value must at least respond to methods include? and [].")
       end
